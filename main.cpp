@@ -23,6 +23,7 @@ int main() {
     int32_t opcion;
 
     Lista lista;
+    item objeto;
 
     while(auxiliar){
         std::cout << "\n------ Funciones de lista ------" << '\n';
@@ -48,18 +49,36 @@ int main() {
                 std::cout << ((esListaVacia(lista)) ? "La lista está vacía" : "La lista no está vacía") << '\n';
                 break;
             case 3:
+                mostrar(lista);
                 break;
             case 4:
+                std::cout << "Primer elemento  " << primerElemento(lista) << '\n';
                 break;
             case 5:
+                std::cin >> objeto;
+                insertar(lista, objeto);
+                std::cout << "Se insertó correctamente el elemento   " << objeto << '\n';
+                mostrar(lista);
                 break;
             case 6:
+                borrar(lista);
+                std::cout << "Se eliminó correctamente el primer elemento" << '\n';
+                mostrar(lista);
                 break;
             case 7:
+                std::cout << "Longitud de la lista  " << longitud(lista) << '\n';
                 break;
             case 8:
+                std::cout << "Ingrese elemento a buscar" << '\n';
+                std::cin >> objeto;
+                std::cout << ((pertenece(lista, objeto)) ? "Si pertenece" : "No pertenece" << '\n';
                 break;
             case 9:
+                std::cout << "Ingrese elemento a eliminar" << '\n';
+                std::cin >> objeto;
+                borrarK(lista, objeto);
+                std::cout << "Se eliminaron correctamente todos los elementos iguales a  " << objeto << '\n';
+                mostrar(lista);
                 break;
             default:
                 auxiliar++;
@@ -81,7 +100,7 @@ bool esListaVacia(Lista const lista){
 void mostrar(Lista lista){
     std::cout << "---- Lista ----" << '\n';
     while(!esListaVacia(lista)){
-        std::cout << "Dato: " << lista->dato << '\n';
+        std::cout << lista->dato << "  ";
         lista = lista->siguiente;
     }
 }
@@ -94,14 +113,12 @@ Lista insertar(Lista lista, item objeto){
     auto temporal = new struct Nodo;
     temporal->dato = objeto;
     temporal->siguiente = lista;
-    return temporal;
-    /*lista = temporal;
-    return lista;*/
+    return temporal;    
 }
 
 Lista borrar(Lista lista){
-    Lista temporal = lista->siguiente;
-    lista = lista->siguiente->siguiente;
+    Lista temporal = lista;
+    lista = lista->siguiente;
     delete temporal;
     return lista;
 }
@@ -125,24 +142,13 @@ bool pertenece(Lista lista, item objeto){
 }
 
 Lista borrarK(Lista lista, item objeto){
-    Lista ultimoPuntero = crearLista();
     Lista cabecera = lista;    
 
-    while(!esListaVacia(lista)){
-        if(lista->dato == objeto){
-            ultimoPuntero->siguiente = lista->siguiente;
-            borrar(lista);
+    while (!esListaVacia(lista)) {
+        if (lista->dato == objeto) {
+            borrar(lista)
         }
-        ultimoPuntero = lista;
         lista = lista->siguiente;
     }
     return cabecera;
-
-    /*while (!esListaVacia(lista)) {
-        if (lista->siguiente->dato == objeto) {
-            lista->siguiente = lista->siguiente->siguiente;
-        }
-        lista = lista->siguiente;
-    }*/
 }
-
