@@ -94,8 +94,9 @@ Lista insertar(Lista lista, item objeto){
     auto temporal = new struct Nodo;
     temporal->dato = objeto;
     temporal->siguiente = lista;
-    lista = temporal;
-    return lista;
+    return temporal;
+    /*lista = temporal;
+    return lista;*/
 }
 
 Lista borrar(Lista lista){
@@ -124,13 +125,24 @@ bool pertenece(Lista lista, item objeto){
 }
 
 Lista borrarK(Lista lista, item objeto){
-    Lista nueva = crearLista();
+    Lista ultimoPuntero = crearLista();
+    Lista cabecera = lista;    
 
     while(!esListaVacia(lista)){
         if(lista->dato == objeto){
-            nueva = borrar(lista);
+            ultimoPuntero->siguiente = lista->siguiente;
+            borrar(lista);
         }
+        ultimoPuntero = lista;
         lista = lista->siguiente;
     }
-    return nueva;
+    return cabecera;
+
+    /*while (!esListaVacia(lista)) {
+        if (lista->siguiente->dato == objeto) {
+            lista->siguiente = lista->siguiente->siguiente;
+        }
+        lista = lista->siguiente;
+    }*/
 }
+
