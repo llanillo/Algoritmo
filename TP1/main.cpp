@@ -20,33 +20,38 @@ Lista borrarK(Lista lista, item objeto);
 
 int main() {
     int32_t auxiliar = 1;
+    int8_t vacia = 0;
     int32_t opcion;
 
     Lista lista;
     item objeto;
 
     while(auxiliar){
-        std::cout << "\n------ Funciones de lista ------" << '\n';
+        std::cout << '\n';
         std::cout << "1. Crear Lista" << '\n';
-        std::cout << "2. ¿Está la lista vacía?" << '\n';
-        std::cout << "3. Mostrar lista" << '\n';
-        std::cout << "4. Mostrar primer elemento" << '\n';
-        std::cout << "5. Insertar elemento" << '\n';
-        std::cout << "6. Borrar primer elemento" << '\n';
-        std::cout << "7. Longitud de la lista" << '\n';
-        std::cout << "8. Revisar si el elemento pertenece" << '\n';
-        std::cout << "9. Borrar todos los elementos iguales a lo ingresado" << '\n';
-        std::cout << "10. Salir del programa" << '\n';
+        if (vacia){
+            std::cout << "2. Revisar si la lista esta vacia" << '\n';
+            std::cout << "3. Mostrar lista" << '\n';
+            std::cout << "4. Mostrar primer elemento" << '\n';
+            std::cout << "5. Insertar elemento" << '\n';
+            std::cout << "6. Borrar primer elemento" << '\n';
+            std::cout << "7. Longitud de la lista" << '\n';
+            std::cout << "8. Revisar si el elemento pertenece" << '\n';
+            std::cout << "9. Borrar todos los elementos iguales a lo ingresado" << '\n';
+            std::cout << "10. Salir del programa" << '\n' << '\n';
+        }
 
         std::cin >> opcion;
+        std::cout << '\n';
 
         switch(opcion){
             case 1:
                 lista = crearLista();
-                std::cout << "Se creo correctamente la lista" << '\n';
+                std::cout << "Se creo correctamente la lista\n";
+                vacia++;
                 break;
             case 2:
-                std::cout << ((esListaVacia(lista)) ? "La lista está vacía" : "La lista no está vacía") << '\n';
+                std::cout << ((esListaVacia(lista)) ? "La lista esta vacia" : "La lista no esta vacia") << '\n';
                 break;
             case 3:
                 mostrar(lista);
@@ -56,12 +61,11 @@ int main() {
                 break;
             case 5:
                 std::cin >> objeto;
-                insertar(lista, objeto);
-                std::cout << "Se insertó correctamente el elemento   " << objeto << '\n';
+                lista = insertar(lista, objeto);
                 mostrar(lista);
                 break;
             case 6:
-                borrar(lista);
+                lista = borrar(lista);
                 std::cout << "Se eliminó correctamente el primer elemento" << '\n';
                 mostrar(lista);
                 break;
@@ -69,16 +73,16 @@ int main() {
                 std::cout << "Longitud de la lista  " << longitud(lista) << '\n';
                 break;
             case 8:
-                std::cout << "Ingrese elemento a buscar" << '\n';
+                std::cout << "Ingrese elemento a buscar\n \n";
                 std::cin >> objeto;
-                std::cout << ((pertenece(lista, objeto)) ? "Si pertenece" : "No pertenece" << '\n';
+                std::cout << '\n' << ((pertenece(lista, objeto)) ? "Si pertenece" : "No pertenece") << '\n';
                 break;
             case 9:
-                std::cout << "Ingrese elemento a eliminar" << '\n';
+                std::cout << "Ingrese elemento a eliminar\n \n" ;
                 std::cin >> objeto;
-                borrarK(lista, objeto);
-                std::cout << "Se eliminaron correctamente todos los elementos iguales a  " << objeto << '\n';
-                mostrar(lista);
+                std::cout << '\n';
+                lista = borrarK(lista, objeto);
+//                mostrar(lista);
                 break;
             default:
                 auxiliar++;
@@ -98,11 +102,12 @@ bool esListaVacia(Lista const lista){
 }
 
 void mostrar(Lista lista){
-    std::cout << "---- Lista ----" << '\n';
+    std::cout << "\n---- Lista ----\n";
     while(!esListaVacia(lista)){
         std::cout << lista->dato << "  ";
         lista = lista->siguiente;
     }
+    std::cout << '\n';
 }
 
 item primerElemento(Lista const lista){
@@ -142,13 +147,37 @@ bool pertenece(Lista lista, item objeto){
 }
 
 Lista borrarK(Lista lista, item objeto){
-    Lista cabecera = lista;    
+    Lista cabecera = lista;
 
     while (!esListaVacia(lista)) {
-        if (lista->dato == objeto) {
-            borrar(lista)
+        if(cabecera->dato == objeto){
+            cabecera = borrar(cabecera);
+            lista = lista->siguiente;
         }
-        lista = lista->siguiente;
+        else{
+            if(lista->siguiente != nullptr && lista->siguiente->dato == objeto){
+                lista->siguiente = borrar(lista->siguiente);
+            }
+            else{
+                lista = lista->siguiente;
+            }
+        }
     }
+
     return cabecera;
+}
+
+bool estaContenida(Lista primera, Lista segunda){
+    int32_t contador = 0;
+    int32_t longitudSegunda = longitud(segunda);
+    int32_t longitudPrimera = longitud(primera);
+
+    if(longitudPrimera > longitudSegunda) return false;
+
+    while(!esListaVacia(segunda)){
+        if(pertenece(segunda, primerElemento(primera)))
+            contador++;
+        primera = borrar(primera);
+    }
+    return true;
 }
