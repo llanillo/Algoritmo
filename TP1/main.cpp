@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string.h>
+#include <string>
 
 using item = int32_t;
 struct Nodo{
@@ -17,6 +17,8 @@ Lista borrar(Lista lista);
 int32_t longitud(Lista lista);
 bool pertenece(Lista lista, item objeto);
 Lista borrarK(Lista lista, item objeto);
+bool estaContenida(Lista primera, Lista segunda);
+Lista crearListaFija(int32_t opcion);
 
 int main() {
     int32_t auxiliar = 1;
@@ -38,7 +40,8 @@ int main() {
             std::cout << "7. Longitud de la lista" << '\n';
             std::cout << "8. Revisar si el elemento pertenece" << '\n';
             std::cout << "9. Borrar todos los elementos iguales a lo ingresado" << '\n';
-            std::cout << "10. Salir del programa" << '\n' << '\n';
+            std::cout << "10. Ejecutar funcion para comprobar si una lista esta contenida en otra" << '\n';
+            std::cout << "11. Salir del programa" << '\n' << '\n';
         }
 
         std::cin >> opcion;
@@ -66,7 +69,6 @@ int main() {
                 break;
             case 6:
                 lista = borrar(lista);
-                std::cout << "Se eliminó correctamente el primer elemento" << '\n';
                 mostrar(lista);
                 break;
             case 7:
@@ -82,13 +84,15 @@ int main() {
                 std::cin >> objeto;
                 std::cout << '\n';
                 lista = borrarK(lista, objeto);
-//                mostrar(lista);
+                mostrar(lista);
+                break;
+            case 10:
+                std::cout << '\n' << ((estaContenida(crearListaFija(0), crearListaFija(0))) ? "La primera lista esta contenida" : "La primera lista no esta contenida") << '\n';
                 break;
             default:
-                auxiliar++;
+                auxiliar = 0;
                 break;
         }
-
     }
     return 0;
 }
@@ -122,6 +126,8 @@ Lista insertar(Lista lista, item objeto){
 }
 
 Lista borrar(Lista lista){
+    if (lista == nullptr) return lista;
+
     Lista temporal = lista;
     lista = lista->siguiente;
     delete temporal;
@@ -169,15 +175,34 @@ Lista borrarK(Lista lista, item objeto){
 
 bool estaContenida(Lista primera, Lista segunda){
     int32_t contador = 0;
-    int32_t longitudSegunda = longitud(segunda);
     int32_t longitudPrimera = longitud(primera);
 
-    if(longitudPrimera > longitudSegunda) return false;
+    if(longitudPrimera > longitud(segunda)) return false;
 
-    while(!esListaVacia(segunda)){
+    while(!esListaVacia(primera)){
         if(pertenece(segunda, primerElemento(primera)))
             contador++;
         primera = borrar(primera);
     }
-    return true;
+
+    return contador == longitudPrimera;
+}
+
+Lista crearListaFija(int32_t opcion) {
+    Lista lista = crearLista();
+    int32_t opcion1[] = {2, 3, 6};
+    int32_t opcion2[] = {2, 5, 8,9};
+
+    if(opcion){
+        for (unsigned int i = 0; i < sizeof(opcion1) / sizeof(opcion1[0]); i++){
+            lista = insertar(lista, opcion1[i]);
+        }
+        return lista;
+    }
+    else{
+        for (unsigned int i = 0; i < sizeof(opcion2) / sizeof(opcion2[0]); i++){
+            lista = insertar(lista, opcion2[i]);
+        }
+        return lista;
+    }
 }
