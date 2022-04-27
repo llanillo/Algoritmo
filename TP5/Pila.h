@@ -14,14 +14,17 @@ typedef struct Nodo{
     struct Nodo* Siguiente;
 } Nodo;
 
-typedef struct{
+typedef struct Pila{
     int Altura;
     struct Nodo* Siguiente;
 } Pila;
 typedef Pila* Pilas;
 
 Pilas PilvaVacia(){
-    return NULL;
+    Pilas Auxiliar = (Pilas) malloc(sizeof(struct Pila));
+    Auxiliar->Altura = 0;
+    Auxiliar->Siguiente = NULL;
+    return Auxiliar;
 }
 
 bool EsPilaVacia(Pilas Cabecera){
@@ -44,6 +47,7 @@ Pilas Pop(Pilas Cabecera){
     else{
         Nodo* Auxiliar = Cabecera->Siguiente;
         Cabecera->Siguiente = Cabecera->Siguiente->Siguiente;
+        Cabecera->Altura--;
         free(Auxiliar);
         return Cabecera;
     }
@@ -58,6 +62,7 @@ Pilas Push(Pilas Cabecera, Item Dato){
         Auxiliar->Siguiente = Cabecera->Siguiente;
         Auxiliar->Dato = Dato;
         Cabecera->Siguiente = Auxiliar;
+        Cabecera->Altura++;
         return Cabecera;
     }
 }
