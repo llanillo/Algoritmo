@@ -8,61 +8,91 @@
 #include <stdlib.h>
 
 typedef int Item;
-const int Indefinido = -9999;
+const int Indefinido = -999;
 typedef struct Nodo{
     Item Dato;
     struct Nodo* Siguiente;
 } Nodo;
 
-typedef struct Pila{
+typedef struct{
     int Altura;
     struct Nodo* Siguiente;
 } Pila;
-typedef Pila* Pilas;
 
-Pilas PilvaVacia(){
-    Pilas Auxiliar = (Pilas) malloc(sizeof(struct Pila));
-    Auxiliar->Altura = 0;
-    Auxiliar->Siguiente = NULL;
+Pila PilaVacia();
+bool EsPilaVacia(Pila Cabecera);
+Item Top(Pila Cabecera);
+Pila Pop(Pila Cabecera);
+Pila Push(Pila Cabecera, Item Dato);
+
+Pila PilaVacia(){
+    Pila Auxiliar;
+    Auxiliar.Altura = 0;
+    Auxiliar.Siguiente = NULL;
     return Auxiliar;
 }
 
-bool EsPilaVacia(Pilas Cabecera){
-    return Cabecera->Siguiente == NULL;
+bool EsPilaVacia(Pila Cabecera){
+    return Cabecera.Siguiente == NULL;
 }
 
-Item Top(Pilas Cabecera){
-    if(EsPilaVacia(Cabecera)){
+Item Top(Pila Cabecera){
+    if(EsPilaVacia(Cabecera) || Cabecera.Altura < 0){
         return Indefinido;
     }
     else{
-        return Cabecera->Siguiente->Dato;
+        return Cabecera.Siguiente->Dato;
     }
 }
 
-Pilas Pop(Pilas Cabecera){
+Pila Pop(Pila Cabecera){
     if(EsPilaVacia(Cabecera)){
-        return NULL;
+        return PilaVacia();
     }
     else{
-        Nodo* Auxiliar = Cabecera->Siguiente;
-        Cabecera->Siguiente = Cabecera->Siguiente->Siguiente;
-        Cabecera->Altura--;
+        Nodo* Auxiliar = Cabecera.Siguiente;
+        Cabecera.Siguiente = Cabecera.Siguiente->Siguiente;
+        Cabecera.Altura--;
         free(Auxiliar);
         return Cabecera;
     }
 }
 
-Pilas Push(Pilas Cabecera, Item Dato){
-    if(EsPilaVacia(Cabecera)){
-        return NULL;
+Pila Push(Pila Cabecera, Item Dato){
+    Nodo* Auxiliar = (Nodo*) malloc(sizeof(Nodo));
+    Auxiliar->Siguiente = Cabecera.Siguiente;
+    Auxiliar->Dato = Dato;
+    Cabecera.Siguiente = Auxiliar;
+    Cabecera.Altura++;
+    return Cabecera;
+}
+
+Item Fondo(Pila Cabecera){
+    Item Fondo = Indefinido;
+
+    while(!EsPilaVacia(Cabecera)){
+        Fondo = Cabecera.Siguiente->Dato;
+        Cabecera = Pop(Cabecera);
+    }
+
+    return Fondo;
+}
+
+bool Incluida(Pila Primera, Pila Segunda){
+    if(EsPilaVacia(Primera)){
+        return true;
     }
     else{
-        Nodo* Auxiliar = (Nodo*) malloc(sizeof(Nodo));
-        Auxiliar->Siguiente = Cabecera->Siguiente;
-        Auxiliar->Dato = Dato;
-        Cabecera->Siguiente = Auxiliar;
-        Cabecera->Altura++;
-        return Cabecera;
+        if(EsPilaVacia(Segunda)){
+            return false;
+        }
+        else{
+            if(Top(Primera) == Top(Segunda)){
+                return Incluida(Pop(Primera), Pop(Segunda));
+            }
+            else{
+                return Incluida(Primera, Pop(Segunda));
+            }
+        }
     }
 }
