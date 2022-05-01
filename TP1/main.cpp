@@ -87,7 +87,7 @@ int main() {
                 mostrar(lista);
                 break;
             case 10:
-                std::cout << '\n' << ((estaContenida(crearListaFija(0), crearListaFija(0))) ? "La primera lista esta contenida" : "La primera lista no esta contenida") << '\n';
+                std::cout << '\n' << ((estaContenida(crearListaFija(1), crearListaFija(0))) ? "La primera lista esta contenida" : "La primera lista no esta contenida") << '\n';
                 break;
             default:
                 auxiliar = 0;
@@ -153,14 +153,22 @@ bool pertenece(Lista lista, item objeto){
 }
 
 Lista borrarK(Lista lista, item objeto){
-    Lista cabecera = lista;
+    Lista cabecera = lista; // Auxiliar que apunta al inicio de mi lista
 
+    // lista es otro auxiliar para recorrer toda la lista
+
+    // Pueden suceder dos casos, el número k se encuentra al inicio
+    // o se encuentra en el medio
     while (!esListaVacia(lista)) {
+        // Este es el primer caso, para ir moviendo la cabecera
         if(cabecera->dato == objeto){
-            cabecera = borrar(cabecera);
             lista = lista->siguiente;
+            cabecera = borrar(cabecera);
         }
+        // Segundo caso, esta en el medio
         else{
+            // pregunto si el siguiente del que me encuentro tiene el valor que quiero reemplazar
+            // si es asi, lo borro
             if(lista->siguiente != nullptr && lista->siguiente->dato == objeto){
                 lista->siguiente = borrar(lista->siguiente);
             }
@@ -174,18 +182,24 @@ Lista borrarK(Lista lista, item objeto){
 }
 
 bool estaContenida(Lista primera, Lista segunda){
-    int32_t contador = 0;
-    int32_t longitudPrimera = longitud(primera);
 
-    if(longitudPrimera > longitud(segunda)) return false;
+    if(esListaVacia(primera) && esListaVacia(segunda)){
+        return true;
+    }
+    else{
+        while(!esListaVacia(primera)){
+            if(pertenece(segunda, primerElemento(primera))){
+                primera = primera->siguiente;
+            }
+            else{
+                return false;
+            }
+        }
 
-    while(!esListaVacia(primera)){
-        if(pertenece(segunda, primerElemento(primera)))
-            contador++;
-        primera = borrar(primera);
+        return true;
     }
 
-    return contador == longitudPrimera;
+    return esListaVacia(primera);
 }
 
 Lista crearListaFija(int32_t opcion) {
