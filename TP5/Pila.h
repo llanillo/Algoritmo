@@ -72,13 +72,13 @@ Item Fondo(Pila Cabecera){
 
     while(!EsPilaVacia(Cabecera)){
         Fondo = Cabecera.Siguiente->Dato;
-        Cabecera = Pop(Cabecera);
+        Cabecera.Siguiente = Cabecera.Siguiente->Siguiente;
     }
 
     return Fondo;
 }
 
-bool Incluida(Pila Primera, Pila Segunda){
+bool IncluidaRecursiva(Pila Primera, Pila Segunda){
     if(EsPilaVacia(Primera)){
         return true;
     }
@@ -88,11 +88,25 @@ bool Incluida(Pila Primera, Pila Segunda){
         }
         else{
             if(Top(Primera) == Top(Segunda)){
-                return Incluida(Pop(Primera), Pop(Segunda));
+                return IncluidaRecursiva(Pop(Primera), Pop(Segunda));
             }
             else{
-                return Incluida(Primera, Pop(Segunda));
+                return IncluidaRecursiva(Primera, Pop(Segunda));
             }
         }
     }
+}
+
+bool IncluidaIterativa(Pila Primera, Pila Segunda){
+    while(!EsPilaVacia(Segunda)){
+        if(Top(Primera) == Top(Segunda)){
+            Primera.Siguiente = Primera.Siguiente->Siguiente;
+            Segunda.Siguiente = Segunda.Siguiente->Siguiente;
+        }
+        else{
+            Segunda.Siguiente = Segunda.Siguiente->Siguiente;
+        }
+    }
+
+    return EsPilaVacia(Primera);
 }

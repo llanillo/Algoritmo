@@ -16,10 +16,11 @@ int main(){
     Segunda = Push(Segunda, 1);
     Segunda = Push(Segunda, 2);
     Segunda = Push(Segunda, 5);
-    Segunda = Push(Segunda, 5);
+    Segunda = Push(Segunda, 3);
     Segunda = Push(Segunda, 5);
 
-    printf("Valor: %d\n", Incluida(Primera, Segunda));
+    printf("Fondo1: %d Fondo2: %d\n", Fondo(Primera), Fondo(Segunda));
+    printf("Incluida: %d\n", IncluidaRecursiva(Primera, Segunda));
 
 //    while(!EsPilaVacia(Primera)){
 //        printf("Valor: %d\n", Top(Primera));
