@@ -58,6 +58,9 @@ Pila Pop(Pila Cabecera){
     }
 }
 
+/*
+ * Inserta objeto en la pila
+ */
 Pila Push(Pila Cabecera, Item Dato){
     Nodo* Auxiliar = (Nodo*) malloc(sizeof(Nodo));
     Auxiliar->Siguiente = Cabecera.Siguiente;
