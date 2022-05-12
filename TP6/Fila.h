@@ -7,7 +7,7 @@
 #include <stdbool.h>
 
 typedef int Item;
-const int Indefinido = -999;
+const int Indefinido = -9999;
 
 typedef struct Nodo{
     struct Nodo* Siguiente;
@@ -33,29 +33,40 @@ bool EsFilaVacia(Fila TFila){
 }
 
 Item Frente(Fila Fila){
-    if(!EsFilaVacia(Fila)){
-        return Fila.Frente->Dato;
-    }
-    return Indefinido;
+    return !EsFilaVacia(Fila) ? Fila.Frente->Dato : Indefinido;
 }
 
 Fila Enfila(Fila Fila, Item Objeto){
     Nodo* Auxiliar = (Nodo*) malloc(sizeof(Nodo));
     Auxiliar->Dato = Objeto;
+    Auxiliar->Siguiente = NULL;
 
     if(EsFilaVacia(Fila)){
-        Auxiliar->Siguiente = NULL;
         Fila.Frente = Auxiliar;
-        Fila.Final = Fila.Frente;
-        return Fila;
+        Fila.Final = Auxiliar;
     }
     else{
-        Auxiliar->Siguiente = Fila.Final;
+        Fila.Final->Siguiente = Auxiliar;
         Fila.Final = Auxiliar;
-        return Fila;
     }
+    return Fila;
 }
 
-Fila Defila(Fila TFila){
+Fila Defila(Fila Fila){
+    if(!EsFilaVacia(Fila)){
+        Nodo* Auxiliar = Fila.Frente;
 
+        if(Fila.Frente == Fila.Final){
+            Fila.Frente = NULL;
+            Fila.Final = NULL;
+            free(Auxiliar);
+        }
+        else{
+            Fila.Frente = Fila.Frente->Siguiente;
+            free(Auxiliar);
+        }
+    }
+
+    return Fila;
 }
+
