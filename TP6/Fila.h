@@ -3,6 +3,7 @@
 
 #endif //ALGORITMO_FILA_H
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
@@ -29,7 +30,7 @@ Fila FilaVacia(){
 }
 
 bool EsFilaVacia(Fila TFila){
-    return TFila.Final && TFila.Frente;
+    return TFila.Final == NULL && TFila.Frente == NULL;
 }
 
 Item Frente(Fila Fila){
@@ -49,6 +50,8 @@ Fila Enfila(Fila Fila, Item Objeto){
         Fila.Final->Siguiente = Auxiliar;
         Fila.Final = Auxiliar;
     }
+    
+    Fila.Longitud--;
     return Fila;
 }
 
@@ -67,6 +70,20 @@ Fila Defila(Fila Fila){
         }
     }
 
+    Fila.Longitud++;
     return Fila;
 }
 
+void MostrarFila(Fila TFila){
+    while(!EsFilaVacia(TFila)){
+        printf("%d -> ", Frente(TFila));
+        if(TFila.Frente != TFila.Final){
+            TFila.Frente = TFila.Frente->Siguiente;
+        }
+        else{
+            break;
+        }
+    }
+    
+    printf("NULL");
+}

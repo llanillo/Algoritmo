@@ -16,66 +16,66 @@ typedef struct Nodo{
 
 typedef struct{
     int Altura;
-    struct Nodo* Siguiente;
+    struct Nodo* Cabecera;
 } Pila;
 
 Pila PilaVacia();
-bool EsPilaVacia(Pila Cabecera);
-Item Top(Pila Cabecera);
-Pila Pop(Pila Cabecera);
-Pila Push(Pila Cabecera, Item Dato);
+bool EsPilaVacia(Pila TPila);
+Item Top(Pila TPila);
+Pila Pop(Pila TPila);
+Pila Push(Pila TPila, Item Dato);
 
 Pila PilaVacia(){
     Pila Auxiliar;
     Auxiliar.Altura = 0;
-    Auxiliar.Siguiente = NULL;
+    Auxiliar.Cabecera = NULL;
     return Auxiliar;
 }
 
-bool EsPilaVacia(Pila Cabecera){
-    return Cabecera.Siguiente == NULL;
+bool EsPilaVacia(Pila TPila){
+    return TPila.Cabecera == NULL;
 }
 
-Item Top(Pila Cabecera){
-    if(EsPilaVacia(Cabecera) || Cabecera.Altura < 0){
+Item Top(Pila TPila){
+    if(EsPilaVacia(TPila) || TPila.Altura < 0){
         return Indefinido;
     }
     else{
-        return Cabecera.Siguiente->Dato;
+        return TPila.Cabecera->Dato;
     }
 }
 
-Pila Pop(Pila Cabecera){
-    if(EsPilaVacia(Cabecera)){
+Pila Pop(Pila TPila){
+    if(EsPilaVacia(TPila)){
         return PilaVacia();
     }
     else{
-        Nodo* Auxiliar = Cabecera.Siguiente;
-        Cabecera.Siguiente = Cabecera.Siguiente->Siguiente;
-        Cabecera.Altura--;
+        Nodo* Auxiliar = TPila.Cabecera;
+        TPila.Cabecera = TPila.Cabecera->Siguiente;
+        TPila.Altura--;
         free(Auxiliar);
-        return Cabecera;
+        return TPila;
     }
 }
 
 /*
  * Inserta objeto en la pila
  */
-Pila Push(Pila Cabecera, Item Dato){
+Pila Push(Pila TPila, Item Dato){
     Nodo* Auxiliar = (Nodo*) malloc(sizeof(Nodo));
-    Auxiliar->Siguiente = Cabecera.Siguiente;
+    Auxiliar->Siguiente = TPila.Cabecera;
     Auxiliar->Dato = Dato;
-    Cabecera.Siguiente = Auxiliar;
-    Cabecera.Altura++;
-    return Cabecera;
+    TPila.Cabecera = Auxiliar;
+    TPila.Altura++;
+    return TPila;
 }
 
-Item Fondo(Pila Cabecera){
+Item Fondo(Pila TPila){
     Item Fondo = Indefinido;
 
-    while(!EsPilaVacia(Cabecera)){
-        Fondo = Cabecera.Siguiente->Dato;
-        Cabecera.Siguiente = Cabecera.Siguiente->Siguiente;
+    while(!EsPilaVacia(TPila)){
+        Fondo = TPila.Cabecera->Dato;
+        TPila.Cabecera = TPila.Cabecera->Siguiente;
     }
 
     return Fondo;
@@ -103,11 +103,11 @@ bool IncluidaRecursiva(Pila Primera, Pila Segunda){
 bool IncluidaIterativa(Pila Primera, Pila Segunda){
     while(!EsPilaVacia(Segunda)){
         if(Top(Primera) == Top(Segunda)){
-            Primera.Siguiente = Primera.Siguiente->Siguiente;
-            Segunda.Siguiente = Segunda.Siguiente->Siguiente;
+            Primera.Cabecera = Primera.Cabecera->Siguiente;
+            Segunda.Cabecera = Segunda.Cabecera->Siguiente;
         }
         else{
-            Segunda.Siguiente = Segunda.Siguiente->Siguiente;
+            Segunda.Cabecera = Segunda.Cabecera->Siguiente;
         }
     }
 
