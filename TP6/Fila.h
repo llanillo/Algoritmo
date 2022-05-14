@@ -21,6 +21,15 @@ typedef struct Fila{
     int Longitud;
 } Fila;
 
+Fila FilaVacia();
+bool EsFilaVacia(Fila Fila);
+Item Frente(Fila Fila);
+Fila Enfila(Fila Fila, Item Objeto);
+Fila Defila(Fila Fila);
+void MostrarFila(Fila TFila);
+Fila Invertir(Fila Original, Fila Vacia);
+Fila Mezclar(Fila Primera, Fila Segunda);
+
 Fila FilaVacia(){
     Fila Temporal;
     Temporal.Frente = NULL;
@@ -29,12 +38,16 @@ Fila FilaVacia(){
     return Temporal;
 }
 
-bool EsFilaVacia(Fila TFila){
-    return TFila.Final == NULL && TFila.Frente == NULL;
+bool EsFilaVacia(Fila Fila){
+    return Fila.Final == NULL && Fila.Frente == NULL;
 }
 
 Item Frente(Fila Fila){
     return !EsFilaVacia(Fila) ? Fila.Frente->Dato : Indefinido;
+}
+
+Item Final(Fila Fila){
+    return !EsFilaVacia(Fila) ? Fila.Final->Dato : Indefinido;
 }
 
 Fila Enfila(Fila Fila, Item Objeto){
@@ -51,7 +64,7 @@ Fila Enfila(Fila Fila, Item Objeto){
         Fila.Final = Auxiliar;
     }
     
-    Fila.Longitud--;
+    Fila.Longitud++;
     return Fila;
 }
 
@@ -68,9 +81,9 @@ Fila Defila(Fila Fila){
             Fila.Frente = Fila.Frente->Siguiente;
             free(Auxiliar);
         }
+        Fila.Longitud--;
     }
 
-    Fila.Longitud++;
     return Fila;
 }
 
@@ -86,4 +99,70 @@ void MostrarFila(Fila TFila){
     }
     
     printf("NULL");
+}
+
+Fila Invertir(Fila Original, Fila Vacia){
+    if(!EsFilaVacia(Original)){
+        Item Auxiliar = Frente(Original);
+        Original = Defila(Original);
+        Vacia =  Invertir(Original, Vacia);
+        return Enfila(Vacia, Auxiliar);
+    }
+
+    return Original;
+}
+
+Fila Mezclar(Fila Primera, Fila Segunda){
+    if(EsFilaVacia(Primera)){
+        return Segunda;
+    }
+    else{
+        if(EsFilaVacia(Segunda)){
+            return Primera;
+        }
+        else{
+            if(Frente(Primera) > Frente(Segunda)){
+                if(Final(Primera) <= Final(Segunda)){
+                    Primera = Enfila(Primera, Frente(Segunda));
+                    Segunda = Defila(Segunda);
+                }
+                else{
+                    Segunda = Enfila(Segunda, Frente(Primera));
+                    Primera = Defila(Primera);
+                }
+            }
+            else if(Frente(Primera) == Frente(Segunda)){
+                Segunda = Enfila(Segunda, Frente(Segunda));
+                Segunda = Enfila(Segunda, Frente(Primera));
+                Segunda = Defila(Segunda);
+                Primera = Defila(Primera);
+            }
+            else{
+                if(Frente(Segunda) >= Final(Primera)){
+                    Primera = Enfila(Primera, Frente(Segunda));
+                    Segunda = Defila(Segunda);
+                }
+                else{
+                    Segunda = Enfila(Segunda, Frente(Primera));
+                    Primera = Defila(Primera);
+                }
+            }
+
+            return Mezclar(Primera, Segunda);
+        }
+    }
+}
+
+int SumaPares(Fila Fila){
+    if(EsFilaVacia(Fila)){
+        return 0;
+    }
+    else{
+        if(Frente(Fila) % 2 == 0){
+            return Frente(Fila) + SumaPares(Defila(Fila));
+        }
+        else{
+            return SumaPares(Defila(Fila));
+        }
+    }
 }
