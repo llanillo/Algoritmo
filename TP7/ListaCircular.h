@@ -25,7 +25,13 @@ bool EsLCVacia(ListaCircular Lista);
 ListaCircular LCVacia();
 Item LCValor(ListaCircular Lista);
 void MostrarLC(ListaCircular Lista);
+ListaCircular LCRotar(ListaCircular Lista);
+bool LCPertenece(ListaCircular Lista, Item Objeto);
 ListaCircular LCInsertar(ListaCircular Lista, Item Dato);
+ListaCircular LCBorrar(ListaCircular Lista);
+ListaCircular LCBorrarK(ListaCircular Lista, Item Objeto);
+
+int ContarPares(ListaCircular Lista);
 
 bool EsLCVacia(ListaCircular Lista){
     return Lista.Cabecera == NULL;
@@ -76,6 +82,35 @@ ListaCircular LCBorrar(ListaCircular Lista){
     }
 
     return Lista;
+}
+
+ListaCircular LCBorrarK(ListaCircular Lista, Item Objeto){
+    int Longitud = Lista.Longitud;
+
+    while(Longitud){
+        if(Lista.Cabecera->Siguiente->Dato == Objeto){
+            Lista = LCBorrar(Lista);
+        }
+        else{
+            Lista.Cabecera = Lista.Cabecera->Siguiente;
+        }
+
+        Longitud--;
+    }
+
+    return Lista;
+}
+
+bool LCPertenece(ListaCircular Lista, Item Objeto){
+    int Longitud = Lista.Longitud;
+
+    while(Longitud){
+        if(Lista.Cabecera->Dato == Objeto){
+            return true;
+        }
+    }
+
+    return false;
 }
 
 ListaCircular LCRotar(ListaCircular Lista){
