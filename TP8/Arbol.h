@@ -3,12 +3,13 @@
 
 #endif //ALGORITMO_ARBOL_H
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
-const int Indefinido = -9999;
+const char Indefinido = '@';
 
-typedef int Item;
+typedef char Item;
 
 typedef struct Nodo{
     struct Nodo* Izquierda;
@@ -18,18 +19,23 @@ typedef struct Nodo{
 
 typedef Nodo* Arbol;
 
-Arbol ABVacio(Arbol Izquierda, Arbol Derecha, Item Objeto);
-bool EsArbolVacio(Arbol TArbol);
+Arbol ABVacio();
+Arbol ArmarAB(Arbol Izquierda, Arbol Derecha, Item Objeto);
+bool EsABVacio(Arbol TArbol);
 Arbol ABIzquierda(Arbol TArbol);
 Arbol ABDerecha(Arbol TArbol);
 Item ABRaiz(Arbol TArbol);
 bool Pertenece(Arbol TArbol, Item Objeto);
 
-bool EsArbolVacio(Arbol TArbol){
+bool EsABVacio(Arbol TArbol){
     return TArbol == NULL;
 }
 
-Arbol ABVacio(Arbol Izquierda, Arbol Derecha, Item Objeto){
+Arbol ABVacio (){
+    return NULL;
+}
+
+Arbol ArmarAB(Arbol Izquierda, Arbol Derecha, Item Objeto){
     Nodo* Temporal = (Arbol) malloc(sizeof(struct Nodo));
     Temporal->Raiz = Objeto;
     Temporal->Derecha = Derecha;
@@ -46,11 +52,11 @@ Arbol ABDerecha(Arbol TArbol){
 }
 
 Item ABRaiz(Arbol TArbol){
-    return EsArbolVacio(TArbol) ? Indefinido : TArbol->Raiz;
+    return EsABVacio(TArbol) ? Indefinido : TArbol->Raiz;
 }
 
 bool Pertenece(Arbol TArbol, Item Objeto){
-    if(EsArbolVacio(TArbol)){
+    if(EsABVacio(TArbol)){
         return false;
     }
     else{
@@ -64,3 +70,23 @@ bool Pertenece(Arbol TArbol, Item Objeto){
         }
     }
 }
+
+/*
+ * Se debe mandar un contador en cero (0)
+ */
+void MostrarArbol(Arbol TArbol, int contador){
+    if(EsABVacio(TArbol)){
+        return;
+    }
+    else{
+        MostrarArbol(TArbol->Derecha, contador + 1);
+
+        for(unsigned int i = 0; i < contador; i++){
+            printf("   ");
+        }
+
+        printf("%c\n", TArbol->Raiz);
+        MostrarArbol(TArbol->Izquierda, contador + 1);
+    }
+}
+

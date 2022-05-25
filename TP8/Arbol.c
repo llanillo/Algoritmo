@@ -1,17 +1,13 @@
 #include "Arbol.h"
 
 int main(){
+    Arbol TArbol0 = ArmarAB(NULL, NULL, 'a');
+    Arbol TArbol1 = ArmarAB(NULL, NULL, 'b');
+    Arbol TArbol2 = ArmarAB(TArbol1, TArbol0, 'c');
+    Arbol TArbol3 = ArmarAB(NULL, TArbol2, 'd');
+    Arbol TArbol4 = ArmarAB(TArbol3, NULL, 'e');
+    Arbol TArbol5 = ArmarAB(TArbol4, ArmarAB(NULL, NULL, 'f'), 'g');
 
-    // Punto 1
-    char Abecedario [] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
-                          'l','m', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
-                          'v', 'w','y', 'x', 'z'};
-    float Frecuencias [] = {0.110845, 0.010895, 0.48778, 0.049769, 0.133336, 0.007965, 0.011638,
-                            0.006108, 0.077790, 0.002889, 0.000083, 0.053524, 0.026494, 0.073580,
-                            0.093925, 0.026700, 0.008625, 0.061571, 0.079605, 0.051378,
-                            0.041887, 0.009698, 0.000041, 0.001940, 0.008336, 0.002600};
-
-    Arbol TArbol = ABVacio(NULL, NULL, 200);
-
+    MostrarArbol(TArbol5, 0);
     return 0;
 }
