@@ -8,16 +8,13 @@ typedef struct Cadidatos{
 } Candidato;
 
 int BuscarIndiceMenorFrecuencia(Candidato Arreglo[], int Tamano);
+void VerCodigoLetras(Arbol Arbol, int contador);
 
 int main(){
 
-//    char Candidatos [] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
-//                          'l','m', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
-//                          'v', 'w','y', 'x', 'z'};
-//    float Frecuencias [] = {0.110845, 0.010895, 0.48778, 0.049769, 0.133336, 0.007965, 0.011638,
-//                            0.006108, 0.077790, 0.002889, 0.000083, 0.053524, 0.026494, 0.073580,
-//                            0.093925, 0.026700, 0.008625, 0.061571, 0.079605, 0.051378,
-//                            0.041887, 0.009698, 0.000041, 0.001940, 0.008336, 0.002600};
+    /**+++++++++++++++++++++++++++++++************+++++++++++++++++++++++++++++++***************
+     +++************************++++ Ejercicio 1 - Crear Huffman +++************************++++
+     ***+++++++++++++++++++++++++++++++*********************************************************/
     int TamanoArreglo = TAMANO;
     Arbol Arboles [TAMANO];
     Candidato Candidatos [] = {{'a', 0.110845}, {'b', 0.010895},
@@ -66,15 +63,22 @@ int main(){
         Arbol Final = ArmarAB(Arboles[IndicePrimerMenor], Arboles[IndiceSegundoMenor], ' ');
         Arboles[IndiceSegundoMenor] = Final;
         Candidatos[IndiceSegundoMenor].Frecuencia += Auxiliar;
-
         TamanoArreglo--;
     }
 
     /*
-     * Busco el índice del arbol que quedo y lo muestro
+     * Buscamos el arbol final en el arreglo
      */
     int Indice = BuscarIndiceMenorFrecuencia(Candidatos, TAMANO);
-    MostrarArbol(Arboles[Indice], 0);
+    Arbol Final = Arboles[Indice];
+    MostrarArbol(Final, 0 );
+
+    /**+++++++++++++++++++++++++++++++************+++++++++++++++++++++++++++++++***************
+     ***********************++++ Ejercicio 2 - Código de cada letra ***++++++++*****************
+     ***+++++++++++++++++++++++++++++++*********************************************************/
+    VerCodigoLetras(Final, 0);
+
+
 
     return 0;
 }
@@ -84,7 +88,7 @@ int main(){
  */
 int BuscarIndiceMenorFrecuencia(Candidato Arreglo[], int Tamano){
     int Indice = 0;
-    float Menor = 2.0f;
+    float Menor = 20.0f;
 
     for(unsigned int i = 0; i < Tamano; i++){
         if(Arreglo[i].Frecuencia < Menor){
@@ -94,4 +98,19 @@ int BuscarIndiceMenorFrecuencia(Candidato Arreglo[], int Tamano){
     }
 
     return Indice;
+}
+
+/*
+ *  Muestra los códigos de cada letra en la codificación Huffman
+ */
+void VerCodigoLetras(Arbol Arbol, int contador){
+    if(!EsABVacio(Arbol)){
+        VerCodigoLetras(Arbol->Izquierda, contador * 10);
+
+        if(Arbol->Raiz != ' '){
+            printf("Letra: %c   Codigo: %d\n", Arbol->Raiz, contador);
+        }
+
+        VerCodigoLetras(Arbol->Derecha, contador * 10 + 1);
+    }
 }
