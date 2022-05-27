@@ -20,6 +20,7 @@ typedef struct Nodo{
 typedef Nodo* Arbol;
 
 Arbol ABVacio();
+bool EsHoja(Arbol Arbol);
 Arbol ArmarAB(Arbol Izquierda, Arbol Derecha, Item Objeto);
 bool EsABVacio(Arbol TArbol);
 Arbol ABIzquierda(Arbol TArbol);
@@ -29,6 +30,17 @@ bool Pertenece(Arbol TArbol, Item Objeto);
 
 bool EsABVacio(Arbol TArbol){
     return TArbol == NULL;
+}
+
+bool EsHoja(Arbol Arbol)
+{
+    if(!EsABVacio(Arbol)){
+        return Arbol->Derecha == NULL && Arbol->Izquierda == NULL ? true : false;
+        }
+    else{
+        return false;
+    }
+
 }
 
 Arbol ABVacio (){
@@ -72,21 +84,21 @@ bool Pertenece(Arbol TArbol, Item Objeto){
 }
 
 /*
- * Se debe mandar un contador en cero (0)
+ * Se debe mandar un Contador en cero (0)
  */
-void MostrarArbol(Arbol TArbol, int contador){
+void MostrarArbol(Arbol TArbol, int Contador){
     if(EsABVacio(TArbol)){
         return;
     }
     else{
-        MostrarArbol(TArbol->Derecha, contador + 1);
+        MostrarArbol(TArbol->Derecha, Contador + 1);
 
-        for(unsigned int i = 0; i < contador; i++){
+        for(unsigned int i = 0; i < Contador; i++){
             printf("   ");
         }
 
         printf("%c\n", TArbol->Raiz);
-        MostrarArbol(TArbol->Izquierda, contador + 1);
+        MostrarArbol(TArbol->Izquierda, Contador + 1);
     }
 }
 
