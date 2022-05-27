@@ -22,14 +22,14 @@ typedef Nodo* Arbol;
 Arbol ABVacio();
 bool EsHoja(Arbol Arbol);
 Arbol ArmarAB(Arbol Izquierda, Arbol Derecha, Item Objeto);
-bool EsABVacio(Arbol TArbol);
-Arbol ABIzquierda(Arbol TArbol);
-Arbol ABDerecha(Arbol TArbol);
-Item ABRaiz(Arbol TArbol);
-bool Pertenece(Arbol TArbol, Item Objeto);
+bool EsABVacio(Arbol Arbol);
+Arbol ABIzquierda(Arbol Arbol);
+Arbol ABDerecha(Arbol Arbol);
+Item ABRaiz(Arbol Arbol);
+bool Pertenece(Arbol Arbol, Item Objeto);
 
-bool EsABVacio(Arbol TArbol){
-    return TArbol == NULL;
+bool EsABVacio(Arbol Arbol){
+    return Arbol == NULL;
 }
 
 bool EsHoja(Arbol Arbol)
@@ -55,29 +55,29 @@ Arbol ArmarAB(Arbol Izquierda, Arbol Derecha, Item Objeto){
     return Temporal;
 }
 
-Arbol ABIzquierda(Arbol TArbol){
-    return TArbol->Izquierda;
+Arbol ABIzquierda(Arbol Arbol){
+    return Arbol->Izquierda;
 }
 
-Arbol ABDerecha(Arbol TArbol){
-    return TArbol->Derecha;
+Arbol ABDerecha(Arbol Arbol){
+    return Arbol->Derecha;
 }
 
-Item ABRaiz(Arbol TArbol){
-    return EsABVacio(TArbol) ? Indefinido : TArbol->Raiz;
+Item ABRaiz(Arbol Arbol){
+    return EsABVacio(Arbol) ? Indefinido : Arbol->Raiz;
 }
 
-bool Pertenece(Arbol TArbol, Item Objeto){
-    if(EsABVacio(TArbol)){
+bool Pertenece(Arbol Arbol, Item Objeto){
+    if(EsABVacio(Arbol)){
         return false;
     }
     else{
-        if(TArbol->Raiz == Objeto){
+        if(Arbol->Raiz == Objeto){
             return true;
         }
         else{
-            bool LadoDerecho = Pertenece(ABDerecha(TArbol), Objeto);
-            bool LadoIzquierdo = Pertenece(ABDerecha(TArbol), Objeto);
+            bool LadoDerecho = Pertenece(ABDerecha(Arbol), Objeto);
+            bool LadoIzquierdo = Pertenece(ABDerecha(Arbol), Objeto);
             return LadoDerecho || LadoIzquierdo;
         }
     }
@@ -86,19 +86,19 @@ bool Pertenece(Arbol TArbol, Item Objeto){
 /*
  * Se debe mandar un Contador en cero (0)
  */
-void MostrarArbol(Arbol TArbol, int Contador){
-    if(EsABVacio(TArbol)){
+void MostrarArbol(Arbol Arbol, int Contador){
+    if(EsABVacio(Arbol)){
         return;
     }
     else{
-        MostrarArbol(TArbol->Derecha, Contador + 1);
+        MostrarArbol(Arbol->Derecha, Contador + 1);
 
         for(unsigned int i = 0; i < Contador; i++){
             printf("   ");
         }
 
-        printf("%c\n", TArbol->Raiz);
-        MostrarArbol(TArbol->Izquierda, Contador + 1);
+        printf("%c\n", Arbol->Raiz);
+        MostrarArbol(Arbol->Izquierda, Contador + 1);
     }
 }
 
