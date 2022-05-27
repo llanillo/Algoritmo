@@ -13,13 +13,15 @@ typedef struct Huffman{
     float Frecuencia;
 } Huffman;
 
-Arbol CodificarHuffman(Candidato Arreglo[], int Tamano);
+Arbol CrearArbolHuffman(Candidato Arreglo[], int Tamano);
 int BuscarIndiceMenorFrecuencia(Huffman Arreglo[], int Tamano, int EvitarIndice);
-void ImprimirCodigos(Arbol Arbol, int Auxiliar[], int Contador);
+void ImprimirCodigos(Arbol Arbol, int Auxiliar[], int Altura);
+void ImprimirCodigoLetra(Arbol Arbol, int Auxiliar[], int Altura, char Letra);
+void CodificarPalabra(Arbol Arbol, int Tamano, char Palabra []);
 
 int main(){
 
-    #pragma region Ejercicio1
+    #pragma region Ejercicio1 - Crear árbol de Huffman
 
     Candidato Candidatos [] = {{'a', 0.110845f}, {'b', 0.010895f},
                                {'c', 0.048778f}, {'d', 0.049769f},
@@ -35,16 +37,24 @@ int main(){
                                {'w', 0.000041f}, {'y', 0.008336f},
                                {'x', 0.001940f}, {'z', 0.002600f}};
 
-    #pragma endregion
-
-    #pragma region Ejercicio2
-
     int Auxiliar[TAMANO];
-    ImprimirCodigos(CodificarHuffman(Candidatos, TAMANO), Auxiliar, 0);
+    Arbol Final = CrearArbolHuffman(Candidatos, TAMANO);
 
     #pragma endregion
 
-    #pragma region Ejercicio3
+    #pragma region Ejercicio2 - Imprimir códigos de árbol de Huffman
+
+    ImprimirCodigos(Final, Auxiliar, 0);
+
+    #pragma endregion
+
+    #pragma region Ejercicio3 - Codificar palabra con árbol de Huffman
+
+    char Palabra [100];
+    printf("Ingrese la palabra a codificar\n");
+    fgets(Palabra, 100, stdin);
+
+    CodificarPalabra(Final, TAMANO, Palabra);
 
     #pragma endregion
 
@@ -70,25 +80,25 @@ int BuscarIndiceMenorFrecuencia(Huffman Arreglo[], int Tamano, int EvitarIndice)
 }
 
 /*
- *  Muestra los códigos de cada letra en la codificación Huffman
+ *  Muestra los códigos de cada letra en la codificación Huffman.
  */
-void ImprimirCodigos(Arbol Arbol, int Auxiliar[], int Contador){
+void ImprimirCodigos(Arbol Arbol, int Auxiliar[], int Altura){
     if(!EsABVacio(Arbol)){
 
         if(ABIzquierda(Arbol)){
-            Auxiliar[Contador] = 0;
-            ImprimirCodigos(ABIzquierda(Arbol), Auxiliar, Contador + 1);
+            Auxiliar[Altura] = 0;
+            ImprimirCodigos(ABIzquierda(Arbol), Auxiliar, Altura + 1);
         }
 
         if (ABDerecha(Arbol)){
-            Auxiliar[Contador] = 1;
-            ImprimirCodigos(ABDerecha(Arbol), Auxiliar, Contador + 1);
+            Auxiliar[Altura] = 1;
+            ImprimirCodigos(ABDerecha(Arbol), Auxiliar, Altura + 1);
         }
 
         if (EsHoja(Arbol)){
             printf("Letra: %c  Codigo: ", Arbol->Raiz);
 
-            for (unsigned int i = 0; i < Contador; i++) {
+            for (unsigned int i = 0; i < Altura; i++) {
                 printf("%d", Auxiliar[i]);
             }
 
@@ -97,7 +107,10 @@ void ImprimirCodigos(Arbol Arbol, int Auxiliar[], int Contador){
     }
 }
 
-Arbol CodificarHuffman(Candidato Arreglo[], int Tamano){
+/*
+ * Devuelve el árbol creado con la codificación de Huffman dado el arreglo de Candidatos
+ */
+Arbol CrearArbolHuffman(Candidato Arreglo[], int Tamano){
     int IndicePrimerMenor, IndiceSegundoMenor;
     int CantidadSubArboles = Tamano;
     Huffman ArbolesHuffman [Tamano];
@@ -136,4 +149,42 @@ Arbol CodificarHuffman(Candidato Arreglo[], int Tamano){
     }
 
     return Final;
+}
+
+/*
+ *
+ */
+void CodificarPalabra(Arbol Arbol, int Tamano, char Palabra []){
+    int CantidadLetras = (int) strlen(Palabra);
+
+    printf("Codigo: ");
+
+    for(unsigned int i = 0; i < CantidadLetras; i++){
+        int Auxiliar[TAMANO];
+        ImprimirCodigoLetra(Arbol, Auxiliar, 0, Palabra[i]);
+    }
+
+}
+
+void ImprimirCodigoLetra(Arbol Arbol, int Auxiliar[], int Altura, char Letra){
+    if(!EsABVacio(Arbol)){
+
+        if(ABIzquierda(Arbol)){
+            Auxiliar[Altura] = 0;
+            ImprimirCodigoLetra(ABIzquierda(Arbol), Auxiliar, Altura + 1, Letra);
+        }
+
+        if (ABDerecha(Arbol)){
+            Auxiliar[Altura] = 1;
+            ImprimirCodigoLetra(ABDerecha(Arbol), Auxiliar, Altura + 1, Letra);
+        }
+
+        if (EsHoja(Arbol) && ABRaiz(Arbol) == Letra){
+            for (unsigned int i = 0; i < Altura; i++) {
+                printf("%d", Auxiliar[i]);
+            }
+
+            return;
+        }
+    }
 }
