@@ -76,9 +76,7 @@ bool Pertenece(Arbol Arbol, Item Objeto){
             return true;
         }
         else{
-            bool LadoDerecho = Pertenece(ABDerecha(Arbol), Objeto);
-            bool LadoIzquierdo = Pertenece(ABDerecha(Arbol), Objeto);
-            return LadoDerecho || LadoIzquierdo;
+            return Pertenece(ABDerecha(Arbol), Objeto) || Pertenece(ABDerecha(Arbol), Objeto);
         }
     }
 }
