@@ -27,6 +27,12 @@ Arbol ABIzquierda(Arbol Arbol);
 Arbol ABDerecha(Arbol Arbol);
 Item ABRaiz(Arbol Arbol);
 bool Pertenece(Arbol Arbol, Item Objeto);
+void MostrarArbol(Arbol Arbol, int Contador);
+int NumeroHojas(Arbol Arbol);
+void OrdenSimetrico(Arbol Arbol);
+int CuentaItem(Arbol Arbol, Item Item);
+int Max(int num1, int num2);
+int Altura(Arbol Arbol);
 
 bool EsABVacio(Arbol Arbol){
     return Arbol == NULL;
@@ -76,7 +82,7 @@ bool Pertenece(Arbol Arbol, Item Objeto){
             return true;
         }
         else{
-            return Pertenece(ABDerecha(Arbol), Objeto) || Pertenece(ABDerecha(Arbol), Objeto);
+            return Pertenece(ABDerecha(Arbol), Objeto) || Pertenece(ABIzquierda(Arbol), Objeto);
         }
     }
 }
@@ -100,3 +106,55 @@ void MostrarArbol(Arbol Arbol, int Contador){
     }
 }
 
+int NumeroHojas(Arbol Arbol){
+    if(EsABVacio(Arbol)){
+        return 0;
+    }
+    else{
+        if(EsHoja(Arbol)){
+            return 1;
+        }
+        else{
+            return NumeroHojas(ABIzquierda(Arbol)) + NumeroHojas(ABDerecha(Arbol));
+        }
+    }
+}
+
+
+void OrdenSimetrico(Arbol Arbol){
+    if(!EsABVacio(Arbol)){
+        OrdenSimetrico(ABIzquierda(Arbol));
+        printf("Raíz: %d\b", Arbol->Raiz);
+        OrdenSimetrico(ABDerecha(Arbol));
+    }
+}
+
+/*
+ * Cantidad de veces que se repite un ítem
+ */
+int CuentaItem(Arbol Arbol, Item Item){
+    if(EsABVacio(Arbol)){
+        return 0;
+    }
+    else{
+        if(Arbol->Raiz == Item){
+            return 1 + CuentaItem(ABIzquierda(Arbol), Item) + CuentaItem(ABDerecha(Arbol), Item);
+        }
+        else{
+            return CuentaItem(ABIzquierda(Arbol), Item) + CuentaItem(ABDerecha(Arbol), Item);
+        }
+    }
+}
+
+int Altura(Arbol Arbol){
+    if(EsABVacio(Arbol) || EsHoja(Arbol)){
+        return 0;
+    }
+    else{
+        return 1 + Max(Altura(ABIzquierda(Arbol)) , ABDerecha(Arbol));
+    }
+}
+
+int Max(int num1, int num2){
+    return (num1 > num2 ) ? num1 : num2;
+}

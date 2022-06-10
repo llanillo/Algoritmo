@@ -124,9 +124,6 @@ Arbol CrearArbolHuffman(Candidato Arreglo[], int Tamano){
         ArbolesHuffman[i].Frecuencia = Arreglo[i].Frecuencia;
     }
 
-    /*
-     * Iteramos mientras el tamaño del arreglo sea mayor que 1
-     */
     while(CantidadSubArboles > 1){
         /*
          *  Buscamos los índices de los caracteres con menor frecuencia en el arreglo de Huffman.
@@ -142,9 +139,11 @@ Arbol CrearArbolHuffman(Candidato Arreglo[], int Tamano){
         Arbol Izquierda = ArbolesHuffman[IndicePrimerMenor].Arbol;
         Arbol Derecha = ArbolesHuffman[IndiceSegundoMenor].Arbol;
         Final = ArmarAB(Izquierda, Derecha, ' ');
+
         ArbolesHuffman[IndiceSegundoMenor].Arbol = Final;
         ArbolesHuffman[IndiceSegundoMenor].Frecuencia += ArbolesHuffman[IndicePrimerMenor].Frecuencia;
         ArbolesHuffman[IndicePrimerMenor].Frecuencia = 2;
+
         CantidadSubArboles--;
     }
 
@@ -152,7 +151,7 @@ Arbol CrearArbolHuffman(Candidato Arreglo[], int Tamano){
 }
 
 /*
- *
+ * Codifica una palabra en la codificación Huffman
  */
 void CodificarPalabra(Arbol Arbol, int Tamano, char Palabra []){
     int CantidadLetras = (int) strlen(Palabra);
@@ -166,6 +165,9 @@ void CodificarPalabra(Arbol Arbol, int Tamano, char Palabra []){
 
 }
 
+/*
+ *  Muestra el código de la letra en la codificación Huffman.
+ */
 void ImprimirCodigoLetra(Arbol Arbol, int Auxiliar[], int Altura, char Letra){
     if(!EsABVacio(Arbol)){
 
