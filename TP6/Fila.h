@@ -75,12 +75,11 @@ Fila Defila(Fila Fila){
         if(Fila.Frente == Fila.Final){
             Fila.Frente = NULL;
             Fila.Final = NULL;
-            free(Auxiliar);
         }
         else{
             Fila.Frente = Fila.Frente->Siguiente;
-            free(Auxiliar);
         }
+        free(Auxiliar);
         Fila.Longitud--;
     }
 

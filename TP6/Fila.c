@@ -39,8 +39,8 @@ int main(){
 
     printf("Suma %d ", SumaPares(Primera));
     printf("Suma2 %d ", SumaPares(Segunda));
-//    Primera = Mezclar(Primera, Segunda);
-//    MostrarFila(Primera);
+    Primera = Mezclar(Primera, Segunda);
+    MostrarFila(Primera);
 
 
     return 0;
