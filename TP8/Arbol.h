@@ -8,7 +8,6 @@
 #include <stdbool.h>
 
 const char Indefinido = '@';
-
 typedef char Item;
 
 typedef struct Nodo{
@@ -20,33 +19,24 @@ typedef struct Nodo{
 typedef Nodo* Arbol;
 
 Arbol ABVacio();
-bool EsHoja(Arbol Arbol);
-Arbol ArmarAB(Arbol Izquierda, Arbol Derecha, Item Objeto);
 bool EsABVacio(Arbol Arbol);
+Arbol ArmarAB(Arbol Izquierda, Arbol Derecha, Item Objeto);
 Arbol ABIzquierda(Arbol Arbol);
 Arbol ABDerecha(Arbol Arbol);
 Item ABRaiz(Arbol Arbol);
 bool Pertenece(Arbol Arbol, Item Objeto);
-void MostrarArbol(Arbol Arbol, int Contador);
+
+bool EsHoja(Arbol Arbol);
 int NumeroHojas(Arbol Arbol);
 void OrdenSimetrico(Arbol Arbol);
 int CuentaItem(Arbol Arbol, Item Item);
-int Max(int num1, int num2);
 int Altura(Arbol Arbol);
+int Max(int num1, int num2);
+
+void MostrarArbol(Arbol Arbol, int Contador);
 
 bool EsABVacio(Arbol Arbol){
     return Arbol == NULL;
-}
-
-bool EsHoja(Arbol Arbol)
-{
-    if(!EsABVacio(Arbol)){
-        return Arbol->Derecha == NULL && Arbol->Izquierda == NULL ? true : false;
-        }
-    else{
-        return false;
-    }
-
 }
 
 Arbol ABVacio (){
@@ -62,15 +52,15 @@ Arbol ArmarAB(Arbol Izquierda, Arbol Derecha, Item Objeto){
 }
 
 Arbol ABIzquierda(Arbol Arbol){
-    return Arbol->Izquierda;
+    return !EsABVacio(Arbol) ? Arbol->Izquierda : NULL;
 }
 
 Arbol ABDerecha(Arbol Arbol){
-    return Arbol->Derecha;
+    return !EsABVacio(Arbol) ? Arbol->Derecha : NULL;
 }
 
 Item ABRaiz(Arbol Arbol){
-    return EsABVacio(Arbol) ? Indefinido : Arbol->Raiz;
+    return !EsABVacio(Arbol) ? Arbol->Raiz : Indefinido;
 }
 
 bool Pertenece(Arbol Arbol, Item Objeto){
@@ -78,13 +68,69 @@ bool Pertenece(Arbol Arbol, Item Objeto){
         return false;
     }
     else{
-        if(Arbol->Raiz == Objeto){
+        if(ABRaiz(Arbol) == Objeto){
             return true;
         }
         else{
             return Pertenece(ABDerecha(Arbol), Objeto) || Pertenece(ABIzquierda(Arbol), Objeto);
         }
     }
+}
+
+bool EsHoja(Arbol Arbol){
+    return EsABVacio(ABIzquierda(Arbol)) && EsABVacio(ABIzquierda(Arbol));
+}
+
+int NumeroHojas(Arbol Arbol){
+    if(EsABVacio(Arbol)){
+        return 0;
+    }
+    else{
+        if(EsHoja(Arbol)){
+            return 1;
+        }
+        else{
+            return NumeroHojas(ABIzquierda(Arbol)) + NumeroHojas(ABDerecha(Arbol));
+        }
+    }
+}
+
+void OrdenSimetrico(Arbol Arbol){
+    if(!EsABVacio(Arbol)){
+        OrdenSimetrico(ABIzquierda(Arbol));
+        printf("Raíz: %d\b", Arbol->Raiz);
+        OrdenSimetrico(ABDerecha(Arbol));
+    }
+}
+
+/*
+ * Cantidad de veces que se repite un ítem
+ */
+int CuentaItem(Arbol Arbol, Item Item){
+    if(EsABVacio(Arbol)){
+        return 0;
+    }
+    else{
+        if(ABRaiz(Arbol) == Item){
+            return 1 + CuentaItem(ABIzquierda(Arbol), Item) + CuentaItem(ABDerecha(Arbol), Item);
+        }
+        else{
+            return CuentaItem(ABIzquierda(Arbol), Item) + CuentaItem(ABDerecha(Arbol), Item);
+        }
+    }
+}
+
+int Altura(Arbol Arbol){
+    if(EsABVacio(Arbol) || EsHoja(Arbol)){
+        return 0;
+    }
+    else{
+        return 1 + Max(Altura(ABIzquierda(Arbol)) , Altura(ABDerecha(Arbol)));
+    }
+}
+
+int Max(int num1, int num2){
+    return (num1 > num2 ) ? num1 : num2;
 }
 
 /*
@@ -104,57 +150,4 @@ void MostrarArbol(Arbol Arbol, int Contador){
         printf("%c\n", Arbol->Raiz);
         MostrarArbol(Arbol->Izquierda, Contador + 1);
     }
-}
-
-int NumeroHojas(Arbol Arbol){
-    if(EsABVacio(Arbol)){
-        return 0;
-    }
-    else{
-        if(EsHoja(Arbol)){
-            return 1;
-        }
-        else{
-            return NumeroHojas(ABIzquierda(Arbol)) + NumeroHojas(ABDerecha(Arbol));
-        }
-    }
-}
-
-
-void OrdenSimetrico(Arbol Arbol){
-    if(!EsABVacio(Arbol)){
-        OrdenSimetrico(ABIzquierda(Arbol));
-        printf("Raíz: %d\b", Arbol->Raiz);
-        OrdenSimetrico(ABDerecha(Arbol));
-    }
-}
-
-/*
- * Cantidad de veces que se repite un ítem
- */
-int CuentaItem(Arbol Arbol, Item Item){
-    if(EsABVacio(Arbol)){
-        return 0;
-    }
-    else{
-        if(Arbol->Raiz == Item){
-            return 1 + CuentaItem(ABIzquierda(Arbol), Item) + CuentaItem(ABDerecha(Arbol), Item);
-        }
-        else{
-            return CuentaItem(ABIzquierda(Arbol), Item) + CuentaItem(ABDerecha(Arbol), Item);
-        }
-    }
-}
-
-int Altura(Arbol Arbol){
-    if(EsABVacio(Arbol) || EsHoja(Arbol)){
-        return 0;
-    }
-    else{
-        return 1 + Max(Altura(ABIzquierda(Arbol)) , ABDerecha(Arbol));
-    }
-}
-
-int Max(int num1, int num2){
-    return (num1 > num2 ) ? num1 : num2;
 }

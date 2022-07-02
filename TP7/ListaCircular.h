@@ -8,12 +8,11 @@
 #include <stdbool.h>
 
 typedef int Item;
-
 const Item Indefinido = -9999;
 
 typedef struct Nodo{
-    Item Dato;
     struct Nodo* Siguiente;
+    Item Dato;
 } Nodo;
 
 typedef struct ListaCircular{
@@ -21,21 +20,17 @@ typedef struct ListaCircular{
     int Longitud;
 } ListaCircular;
 
-bool EsLCVacia(ListaCircular Lista);
 ListaCircular LCVacia();
+bool EsLCVacia(ListaCircular Lista);
 Item LCValor(ListaCircular Lista);
-void MostrarLC(ListaCircular Lista);
-ListaCircular LCRotar(ListaCircular Lista);
-bool LCPertenece(ListaCircular Lista, Item Objeto);
 ListaCircular LCInsertar(ListaCircular Lista, Item Dato);
 ListaCircular LCBorrar(ListaCircular Lista);
+ListaCircular LCRotar(ListaCircular Lista);
+bool LCPertenece(ListaCircular Lista, Item Objeto);
+
+void MostrarLC(ListaCircular Lista);
 ListaCircular LCBorrarK(ListaCircular Lista, Item Objeto);
-
-int ContarPares(ListaCircular Lista);
-
-bool EsLCVacia(ListaCircular Lista){
-    return Lista.Cabecera == NULL;
-}
+int LCContarK(ListaCircular Lista, int Numero, int Contador);
 
 ListaCircular LCVacia(){
     ListaCircular Temporal;
@@ -44,8 +39,12 @@ ListaCircular LCVacia(){
     return Temporal;
 }
 
+bool EsLCVacia(ListaCircular Lista){
+    return Lista.Cabecera == NULL;
+}
+
 Item LCValor(ListaCircular Lista){
-    return EsLCVacia(Lista) ? Indefinido : Lista.Cabecera->Dato;
+    return EsLCVacia(Lista) ? Indefinido : Lista.Cabecera->Siguiente->Dato;
 }
 
 ListaCircular LCInsertar(ListaCircular Lista, Item Dato){
@@ -69,19 +68,51 @@ ListaCircular LCBorrar(ListaCircular Lista){
     if(!EsLCVacia(Lista)){
         Nodo* Auxiliar = Lista.Cabecera->Siguiente;
 
-        if(Lista.Longitud == 1){
+        if(Lista.Cabecera == Lista.Cabecera->Siguiente){
             Lista.Cabecera = NULL;
-            free(Auxiliar);
+            Lista.Cabecera->Siguiente = NULL;
         }
         else{
             Lista.Cabecera->Siguiente = Lista.Cabecera->Siguiente->Siguiente;
-            free(Auxiliar);
         }
 
+        free(Auxiliar);
         Lista.Longitud--;
     }
 
     return Lista;
+}
+
+bool LCPertenece(ListaCircular Lista, Item Dato){
+    while(!EsLCVacia(Lista)){
+        if(Lista.Cabecera->Dato == Dato){
+            return true;
+        }
+
+        Lista.Cabecera = Lista.Cabecera->Siguiente;
+    }
+
+    return false;
+}
+
+ListaCircular LCRotar(ListaCircular Lista){
+    if(!EsLCVacia(Lista)){
+        Lista.Cabecera = Lista.Cabecera->Siguiente;
+    }
+
+    return Lista;
+}
+
+void MostrarLC(ListaCircular Lista){
+    int Auxiliar = Lista.Longitud;
+
+    while(Auxiliar){
+        printf("%d -> ", Lista.Cabecera->Siguiente->Dato);
+        Lista.Cabecera = Lista.Cabecera->Siguiente;
+        Auxiliar--;
+    }
+
+    printf("NULL");
 }
 
 ListaCircular LCBorrarK(ListaCircular Lista, Item Objeto){
@@ -99,35 +130,6 @@ ListaCircular LCBorrarK(ListaCircular Lista, Item Objeto){
     }
 
     return Lista;
-}
-
-bool LCPertenece(ListaCircular Lista, Item Objeto){
-    int Longitud = Lista.Longitud;
-
-    while(Longitud){
-        if(Lista.Cabecera->Dato == Objeto){
-            return true;
-        }
-    }
-
-    return false;
-}
-
-ListaCircular LCRotar(ListaCircular Lista){
-    Lista.Cabecera = Lista.Cabecera->Siguiente;
-    return Lista;
-}
-
-void MostrarLC(ListaCircular Lista){
-    int Auxiliar = Lista.Longitud;
-
-    while(Auxiliar){
-        printf("%d -> ", Lista.Cabecera->Dato);
-        Lista.Cabecera = Lista.Cabecera->Siguiente;
-        Auxiliar--;
-    }
-
-    printf("NULL");
 }
 
 /*

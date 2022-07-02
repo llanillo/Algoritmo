@@ -26,9 +26,15 @@ bool EsFilaVacia(Fila Fila);
 Item Frente(Fila Fila);
 Fila Enfila(Fila Fila, Item Objeto);
 Fila Defila(Fila Fila);
-void MostrarFila(Fila TFila);
+
+Item Final (Fila Fila);
+bool Pertenece(Fila Fila, Item Dato);
+bool IgualdadFilas(Fila Primera, Fila Segunda);
+Fila ConcatenarFilas(Fila Primera, Fila Segunda);
+void MostrarFila(Fila Fila);
 Fila Invertir(Fila Original, Fila Vacia);
 Fila Mezclar(Fila Primera, Fila Segunda);
+int SumaPares(Fila Fila);
 
 Fila FilaVacia(){
     Fila Temporal;
@@ -79,6 +85,7 @@ Fila Defila(Fila Fila){
         else{
             Fila.Frente = Fila.Frente->Siguiente;
         }
+
         free(Auxiliar);
         Fila.Longitud--;
     }
@@ -86,9 +93,47 @@ Fila Defila(Fila Fila){
     return Fila;
 }
 
+/*
+ * Modifica la fila, debe ser padada como puntero, pero entonces habría que
+ * cambiar el Defila a que devuelve un puntero
+ */
+bool Pertenece(Fila Fila, Item Dato){
+    if(EsFilaVacia(Fila)){
+        return false;
+    }
+    else{
+        return Frente(Fila) == Dato || Pertenece(Defila(Fila), Dato);
+    }
+}
+
+bool IgualdadFilas(Fila Primera, Fila Segunda){
+    if(EsFilaVacia(Primera) && EsFilaVacia(Segunda)){
+        return true;
+    }
+    else{
+        if(EsFilaVacia(Primera) || EsFilaVacia(Segunda)){
+            return false;
+        }
+        else{
+            return Frente(Primera) == Frente(Segunda) &&
+                    IgualdadFilas(Defila(Primera), Defila(Segunda));
+        }
+    }
+}
+
+Fila ConcatenarFilas(Fila Primera, Fila Segunda){
+    if(EsFilaVacia(Segunda)){
+        return Primera;
+    }
+    else{
+        return ConcatenarFilas(Enfila(Primera, Frente(Segunda)), Defila(Segunda));
+    }
+}
+
 void MostrarFila(Fila TFila){
     while(!EsFilaVacia(TFila)){
         printf("%d -> ", Frente(TFila));
+
         if(TFila.Frente != TFila.Final){
             TFila.Frente = TFila.Frente->Siguiente;
         }
@@ -96,7 +141,7 @@ void MostrarFila(Fila TFila){
             break;
         }
     }
-    
+
     printf("NULL");
 }
 
@@ -109,6 +154,22 @@ Fila Invertir(Fila Original, Fila Vacia){
     }
 
     return Original;
+}
+
+int SumaPares(Fila Fila){
+    if(EsFilaVacia(Fila)){
+        return 0;
+    }
+    else{
+        int Dato = Frente(Fila);
+
+        if(Dato % 2 == 0){
+            return Dato + SumaPares(Defila(Fila));
+        }
+        else{
+            return SumaPares((Defila(Fila)));
+        }
+    }
 }
 
 Fila Mezclar(Fila Primera, Fila Segunda){
@@ -148,20 +209,6 @@ Fila Mezclar(Fila Primera, Fila Segunda){
             }
 
             return Mezclar(Primera, Segunda);
-        }
-    }
-}
-
-int SumaPares(Fila Fila){
-    if(EsFilaVacia(Fila)){
-        return 0;
-    }
-    else{
-        if(Frente(Fila) % 2 == 0){
-            return Frente(Fila) + SumaPares(Defila(Fila));
-        }
-        else{
-            return SumaPares(Defila(Fila));
         }
     }
 }

@@ -33,15 +33,19 @@ int main(){
     Segunda = Enfila(Segunda, 6);
     Segunda = Enfila(Segunda, 7);
     Segunda = Enfila(Segunda, 8);
-    Segunda = Enfila(Segunda, 8);
+    Segunda = Enfila(Segunda, 9);
     MostrarFila(Segunda);
     printf("\n");
 
-    printf("Suma %d ", SumaPares(Primera));
-    printf("Suma2 %d ", SumaPares(Segunda));
     Primera = Mezclar(Primera, Segunda);
     MostrarFila(Primera);
+    printf("\n");
 
+    Fila Vacia = Invertir(Primera, FilaVacia());
+    MostrarFila(Vacia);
+    printf("\n");
+
+    printf("Suma Pares: %d ", SumaPares(Vacia));
 
     return 0;
 }

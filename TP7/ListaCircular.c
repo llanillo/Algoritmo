@@ -22,8 +22,6 @@ int main(){
     Lista = LCInsertar(Lista, 5);
     Lista = LCInsertar(Lista, 5);
     Lista = LCInsertar(Lista, 5);
-    Lista = LCInsertar(Lista, 5);
-    Lista = LCInsertar(Lista, 5);
     Lista = LCInsertar(Lista, 3);
     MostrarLC(Lista);
     printf("\n");
@@ -31,6 +29,12 @@ int main(){
     printf("Cuenta de 5: %d\n", LCContarK(Lista, 5, 0));
 
     Lista = LCBorrarK(Lista, 5);
+    MostrarLC(Lista);
+    printf("\n");
+
+    Lista = LCRotar(Lista);
+    MostrarLC(Lista);
+    printf("\n");
 
     return 0;
 }
