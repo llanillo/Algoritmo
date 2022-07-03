@@ -1,8 +1,3 @@
-#ifndef ALGORITMO_ARBOL_H
-#define ALGORITMO_ARBOL_H
-
-#endif //ALGORITMO_ARBOL_H
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -26,9 +21,12 @@ Arbol ABDerecha(Arbol Arbol);
 Item ABRaiz(Arbol Arbol);
 bool Pertenece(Arbol Arbol, Item Objeto);
 
+void OrdenPrevio(Arbol Arbol);
+void OrdenSimetrico(Arbol Arbol);
+void OrdenPosterior(Arbol Arbol);
+
 bool EsHoja(Arbol Arbol);
 int NumeroHojas(Arbol Arbol);
-void OrdenSimetrico(Arbol Arbol);
 int CuentaItem(Arbol Arbol, Item Item);
 int Altura(Arbol Arbol);
 int Max(int num1, int num2);
@@ -77,6 +75,29 @@ bool Pertenece(Arbol Arbol, Item Objeto){
     }
 }
 
+void OrdenPrevio(Arbol Arbol){
+    if(!EsABVacio(Arbol)){
+        printf("%c -> ", ABRaiz(Arbol));
+        OrdenPrevio(ABIzquierda(Arbol));
+        OrdenPrevio(ABDerecha(Arbol));
+    }
+}
+void OrdenSimetrico(Arbol Arbol){
+    if(!EsABVacio(Arbol)){
+        OrdenSimetrico(ABIzquierda(Arbol));
+        printf("%c -> ", ABRaiz(Arbol));
+        OrdenSimetrico(ABDerecha(Arbol));
+    }
+}
+
+void OrdenPosterior(Arbol Arbol){
+    if(!EsABVacio(Arbol)){
+        OrdenPosterior(ABIzquierda(Arbol));
+        OrdenPosterior(ABDerecha(Arbol));
+        printf("%c -> ", ABRaiz(Arbol));
+    }
+}
+
 bool EsHoja(Arbol Arbol){
     return EsABVacio(ABIzquierda(Arbol)) && EsABVacio(ABIzquierda(Arbol));
 }
@@ -92,14 +113,6 @@ int NumeroHojas(Arbol Arbol){
         else{
             return NumeroHojas(ABIzquierda(Arbol)) + NumeroHojas(ABDerecha(Arbol));
         }
-    }
-}
-
-void OrdenSimetrico(Arbol Arbol){
-    if(!EsABVacio(Arbol)){
-        OrdenSimetrico(ABIzquierda(Arbol));
-        printf("Raíz: %d\b", Arbol->Raiz);
-        OrdenSimetrico(ABDerecha(Arbol));
     }
 }
 

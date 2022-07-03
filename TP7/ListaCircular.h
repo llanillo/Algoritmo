@@ -1,8 +1,3 @@
-#ifndef ALGORITMO_LISTACIRCULAR_H
-#define ALGORITMO_LISTACIRCULAR_H
-
-#endif //ALGORITMO_LISTACIRCULAR_H
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -29,8 +24,9 @@ ListaCircular LCRotar(ListaCircular Lista);
 bool LCPertenece(ListaCircular Lista, Item Objeto);
 
 void MostrarLC(ListaCircular Lista);
-ListaCircular LCBorrarK(ListaCircular Lista, Item Objeto);
-int LCContarK(ListaCircular Lista, int Numero, int Contador);
+ListaCircular LCUnir(ListaCircular Primera, ListaCircular Segunda);
+ListaCircular LCBorrarK(ListaCircular Lista, Item Dato);
+int LCContarK(ListaCircular Lista, Item Dato, int Contador);
 
 ListaCircular LCVacia(){
     ListaCircular Temporal;
@@ -50,10 +46,11 @@ Item LCValor(ListaCircular Lista){
 ListaCircular LCInsertar(ListaCircular Lista, Item Dato){
     Nodo* Auxiliar = (Nodo*) malloc(sizeof(struct Nodo));
     Auxiliar->Dato = Dato;
+    Auxiliar->Siguiente = NULL;
 
     if(EsLCVacia(Lista)){
         Lista.Cabecera = Auxiliar;
-        Auxiliar->Siguiente = Lista.Cabecera;
+        Lista.Cabecera->Siguiente = Lista.Cabecera;
     }
     else{
         Auxiliar->Siguiente = Lista.Cabecera->Siguiente;
@@ -70,7 +67,6 @@ ListaCircular LCBorrar(ListaCircular Lista){
 
         if(Lista.Cabecera == Lista.Cabecera->Siguiente){
             Lista.Cabecera = NULL;
-            Lista.Cabecera->Siguiente = NULL;
         }
         else{
             Lista.Cabecera->Siguiente = Lista.Cabecera->Siguiente->Siguiente;
@@ -84,12 +80,14 @@ ListaCircular LCBorrar(ListaCircular Lista){
 }
 
 bool LCPertenece(ListaCircular Lista, Item Dato){
-    while(!EsLCVacia(Lista)){
-        if(Lista.Cabecera->Dato == Dato){
+    int Auxiliar = Lista.Longitud;
+
+    for(unsigned int i = 0; i < Lista.Longitud; i++){
+        if(LCValor(Lista) == Dato){
             return true;
         }
 
-        Lista.Cabecera = Lista.Cabecera->Siguiente;
+        Lista = LCRotar(Lista);
     }
 
     return false;
@@ -104,48 +102,68 @@ ListaCircular LCRotar(ListaCircular Lista){
 }
 
 void MostrarLC(ListaCircular Lista){
-    int Auxiliar = Lista.Longitud;
-
-    while(Auxiliar){
-        printf("%d -> ", Lista.Cabecera->Siguiente->Dato);
-        Lista.Cabecera = Lista.Cabecera->Siguiente;
-        Auxiliar--;
+    for(unsigned int i = 0; i < Lista.Longitud; i++){
+        printf("%d -> ", LCValor(Lista));
+        Lista = LCRotar(Lista);
     }
 
     printf("NULL");
 }
 
-ListaCircular LCBorrarK(ListaCircular Lista, Item Objeto){
-    int Longitud = Lista.Longitud;
+ListaCircular LCUnir(ListaCircular Primera, ListaCircular Segunda){
+    if(EsLCVacia(Segunda)){
+        return Primera;
+    }
+    else{
+        return LCUnir(LCInsertar(Primera, LCValor(Segunda)), LCBorrar(Segunda));
+    }
+}
 
-    while(Longitud){
-        if(Lista.Cabecera->Siguiente->Dato == Objeto){
+ListaCircular LCBorrarK(ListaCircular Lista, Item Dato){
+    int Auxiliar = Lista.Longitud;
+
+    while(Auxiliar){
+        if(LCValor(Lista) == Dato){
             Lista = LCBorrar(Lista);
         }
         else{
-            Lista.Cabecera = Lista.Cabecera->Siguiente;
+            Lista = LCRotar(Lista);
         }
 
-        Longitud--;
+        Auxiliar--;
     }
 
     return Lista;
 }
 
+ListaCircular LCBorrarKRecursivo(ListaCircular Lista, Item Dato, int Contador){
+    if(Contador == 0){
+        return Lista;
+    }
+    else{
+        if(LCValor(Lista) == Dato){
+            return LCBorrarKRecursivo(LCBorrar(Lista), Dato, Contador - 1);
+        }
+        else{
+            return LCBorrarKRecursivo(LCRotar(Lista), Dato, Contador - 1);
+        }
+    }
+}
+
 /*
- * Cuenta las veces que se repite el Numero en la Lista.
+ * Cuenta las veces que se repite el Dato en la Lista.
  * Se debe mandar un Contador inicial en cero.
  */
-int LCContarK(ListaCircular Lista, int Numero, int Contador){
-    if(Contador == Lista.Longitud){
+int LCContarK(ListaCircular Lista, Item Dato, int Contador){
+    if(Contador == 0){
         return 0;
     }
     else{
-        if(LCValor(Lista) == Numero){
-            return 1 + LCContarK(LCRotar(Lista), Numero, Contador + 1);
+        if(LCValor(Lista) == Dato){
+            return 1 + LCContarK(LCRotar(Lista), Dato, Contador - 1);
         }
         else{
-            return LCContarK(LCRotar(Lista), Numero, Contador + 1);
+            return LCContarK(LCRotar(Lista), Dato, Contador - 1);
         }
     }
 }

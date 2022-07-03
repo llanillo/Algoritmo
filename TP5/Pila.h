@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 typedef int Item;
-const int Indefinido = -999;
+const int Indefinido = -9999;
 typedef struct Nodo{
     Item Dato;
     struct Nodo* Siguiente;

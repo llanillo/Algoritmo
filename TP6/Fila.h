@@ -1,8 +1,3 @@
-#ifndef ALGORITMO_FILA_H
-#define ALGORITMO_FILA_H
-
-#endif //ALGORITMO_FILA_H
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
