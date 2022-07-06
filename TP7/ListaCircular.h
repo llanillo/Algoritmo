@@ -21,12 +21,13 @@ Item LCValor(ListaCircular Lista);
 ListaCircular LCInsertar(ListaCircular Lista, Item Dato);
 ListaCircular LCBorrar(ListaCircular Lista);
 ListaCircular LCRotar(ListaCircular Lista);
-bool LCPertenece(ListaCircular Lista, Item Objeto);
 
+bool LCPertenece(ListaCircular Lista, Item Objeto);
 void MostrarLC(ListaCircular Lista);
-ListaCircular LCUnir(ListaCircular Primera, ListaCircular Segunda);
+ListaCircular LCUnir(ListaCircular* Primera, ListaCircular* Segunda);
 ListaCircular LCBorrarK(ListaCircular Lista, Item Dato);
-int LCContarK(ListaCircular Lista, Item Dato, int Contador);
+ListaCircular LCBorrarKRecursivo(ListaCircular ListaCircular, Item Dato, int Longitud);
+int LCContarK(ListaCircular Lista, Item Dato, int Longitud);
 
 ListaCircular LCVacia(){
     ListaCircular Temporal;
@@ -102,20 +103,25 @@ ListaCircular LCRotar(ListaCircular Lista){
 }
 
 void MostrarLC(ListaCircular Lista){
-    for(unsigned int i = 0; i < Lista.Longitud; i++){
+    int Auxiliar = Lista.Longitud;
+
+    while(Auxiliar){
         printf("%d -> ", LCValor(Lista));
         Lista = LCRotar(Lista);
+        Auxiliar--;
     }
 
     printf("NULL");
 }
 
-ListaCircular LCUnir(ListaCircular Primera, ListaCircular Segunda){
-    if(EsLCVacia(Segunda)){
-        return Primera;
+ListaCircular LCUnir(ListaCircular* Primera, ListaCircular* Segunda){
+    if(EsLCVacia(*Segunda)){
+        return *Primera;
     }
     else{
-        return LCUnir(LCInsertar(Primera, LCValor(Segunda)), LCBorrar(Segunda));
+        *Primera = LCInsertar(*Primera, LCValor(*Segunda));
+        *Segunda = LCBorrar(*Segunda);
+        return LCUnir(Primera, Segunda);
     }
 }
 
@@ -136,34 +142,36 @@ ListaCircular LCBorrarK(ListaCircular Lista, Item Dato){
     return Lista;
 }
 
-ListaCircular LCBorrarKRecursivo(ListaCircular Lista, Item Dato, int Contador){
-    if(Contador == 0){
-        return Lista;
+ListaCircular LCBorrarKRecursivo(ListaCircular ListaCircular, Item Dato, int Longitud){
+    if(Longitud == 0){
+        return ListaCircular;
     }
     else{
-        if(LCValor(Lista) == Dato){
-            return LCBorrarKRecursivo(LCBorrar(Lista), Dato, Contador - 1);
+        if(LCValor(ListaCircular) == Dato){
+            ListaCircular = LCBorrar(ListaCircular);
+            return LCBorrarKRecursivo(ListaCircular, Dato, Longitud - 1);
         }
         else{
-            return LCBorrarKRecursivo(LCRotar(Lista), Dato, Contador - 1);
+            ListaCircular = LCRotar(ListaCircular);
+            return LCBorrarKRecursivo(ListaCircular, Dato, Longitud - 1);
         }
     }
 }
 
 /*
  * Cuenta las veces que se repite el Dato en la Lista.
- * Se debe mandar un Contador inicial en cero.
+ * Se debe mandar la longitud de la lista circular.
  */
-int LCContarK(ListaCircular Lista, Item Dato, int Contador){
-    if(Contador == 0){
+int LCContarK(ListaCircular Lista, Item Dato, int Longitud){
+    if(Longitud == 0){
         return 0;
     }
     else{
         if(LCValor(Lista) == Dato){
-            return 1 + LCContarK(LCRotar(Lista), Dato, Contador - 1);
+            return 1 + LCContarK(LCRotar(Lista), Dato, Longitud - 1);
         }
         else{
-            return LCContarK(LCRotar(Lista), Dato, Contador - 1);
+            return LCContarK(LCRotar(Lista), Dato, Longitud - 1);
         }
     }
 }

@@ -45,7 +45,17 @@ int main(){
     MostrarFila(Vacia);
     printf("\n");
 
-    printf("Suma Pares: %d ", SumaPares(Vacia));
+    printf("Suma Pares: %d\n", SumaPares(&Vacia));
+
+    Fila Tercera = FilaVacia();
+    Tercera = Enfila(Tercera, 6);
+    Tercera = Enfila(Tercera, 7);
+    Tercera = Enfila(Tercera, 8);
+    Tercera = Enfila(Tercera, 9);
+    MostrarFila(Tercera);
+    printf("\n");
+
+    printf("Pertenece '9': %d\n", Pertenece(&Tercera, 9));
 
     return 0;
 }

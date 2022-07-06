@@ -47,7 +47,7 @@ int main(){
     MostrarLC(Lista2);
     printf("\n");
 
-    ListaCircular Lista3 = LCUnir(Lista, Lista2);
+    ListaCircular Lista3 = LCUnir(&Lista, &Lista2);
     MostrarLC(Lista3);
     printf("\n");
 

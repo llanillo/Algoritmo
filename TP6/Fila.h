@@ -23,13 +23,13 @@ Fila Enfila(Fila Fila, Item Objeto);
 Fila Defila(Fila Fila);
 
 Item Final (Fila Fila);
-bool Pertenece(Fila Fila, Item Dato);
-bool IgualdadFilas(Fila Primera, Fila Segunda);
-Fila ConcatenarFilas(Fila Primera, Fila Segunda);
+bool Pertenece(Fila* Fila, Item Dato);
+bool IgualdadFilas(Fila* Primera, Fila* Segunda);
+Fila ConcatenarFilas(Fila* Primera, Fila* Segunda);
 void MostrarFila(Fila Fila);
 Fila Invertir(Fila Original, Fila Vacia);
 Fila Mezclar(Fila Primera, Fila Segunda);
-int SumaPares(Fila Fila);
+int SumaPares(Fila* Fila);
 
 Fila FilaVacia(){
     Fila Temporal;
@@ -92,36 +92,62 @@ Fila Defila(Fila Fila){
  * Modifica la fila, debe ser padada como puntero, pero entonces habría que
  * cambiar el Defila a que devuelve un puntero
  */
-bool Pertenece(Fila Fila, Item Dato){
+bool Pertenece(Fila* Fila, Item Dato){
+    if(EsFilaVacia(*Fila)){
+        return false;
+    }
+    else{
+        if(Frente(*Fila) == Dato){
+            return true;
+        }
+        else{
+            *Fila = Defila(*Fila);
+            return Pertenece(Fila, Dato);
+        }
+    }
+}
+
+bool Pertenece2(Fila Fila, Item Dato){
     if(EsFilaVacia(Fila)){
         return false;
     }
     else{
-        return Frente(Fila) == Dato || Pertenece(Defila(Fila), Dato);
+        int Auxiliar = Frente(Fila);
+        Fila.Frente = Fila.Frente->Siguiente;
+
+        if(Auxiliar == Dato){
+            return true;
+        }
+        else{
+            return Pertenece2(Fila, Dato);
+        }
     }
 }
 
-bool IgualdadFilas(Fila Primera, Fila Segunda){
-    if(EsFilaVacia(Primera) && EsFilaVacia(Segunda)){
+bool IgualdadFilas(Fila* Primera, Fila* Segunda){
+    if(EsFilaVacia(*Primera) && EsFilaVacia(*Segunda)){
         return true;
     }
     else{
-        if(EsFilaVacia(Primera) || EsFilaVacia(Segunda)){
+        if(EsFilaVacia(*Primera) || EsFilaVacia(*Segunda)){
             return false;
         }
         else{
-            return Frente(Primera) == Frente(Segunda) &&
-                    IgualdadFilas(Defila(Primera), Defila(Segunda));
+            *Primera = Defila(*Primera);
+            *Segunda = Defila(*Segunda);
+            return IgualdadFilas(Primera, Segunda);
         }
     }
 }
 
-Fila ConcatenarFilas(Fila Primera, Fila Segunda){
-    if(EsFilaVacia(Segunda)){
-        return Primera;
+Fila Concatenarfilas(Fila* Primera, Fila* Segunda){
+    if(EsFilaVacia(*Segunda)){
+        return *Primera;
     }
     else{
-        return ConcatenarFilas(Enfila(Primera, Frente(Segunda)), Defila(Segunda));
+        *Primera = Enfila(*Primera, Frente(*Segunda));
+        *Segunda = Defila(*Segunda);
+        return Concatenarfilas(Primera, Segunda);
     }
 }
 
@@ -151,18 +177,36 @@ Fila Invertir(Fila Original, Fila Vacia){
     return Original;
 }
 
-int SumaPares(Fila Fila){
-    if(EsFilaVacia(Fila)){
+int SumaPares(Fila* Fila){
+    if(EsFilaVacia(*Fila)){
         return 0;
     }
     else{
-        int Dato = Frente(Fila);
+        int Dato = Frente(*Fila);
+        *Fila = Defila(*Fila);
 
         if(Dato % 2 == 0){
-            return Dato + SumaPares(Defila(Fila));
+            return Dato + SumaPares(Fila);
         }
         else{
-            return SumaPares((Defila(Fila)));
+            return SumaPares((Fila));
+        }
+    }
+}
+
+int ContarPares(Fila* Fila){
+    if(EsFilaVacia(*Fila)){
+        return 0;
+    }
+    else{
+        int Auxiliar = Frente(*Fila);
+        *Fila = Defila(*Fila);
+
+        if(Auxiliar % 2 == 0){
+            return 1 + ContarPares(Fila);
+        }
+        else{
+            return ContarPares(Fila);
         }
     }
 }

@@ -99,7 +99,12 @@ void OrdenPosterior(Arbol Arbol){
 }
 
 bool EsHoja(Arbol Arbol){
-    return EsABVacio(ABIzquierda(Arbol)) && EsABVacio(ABIzquierda(Arbol));
+    if(EsABVacio(Arbol)){
+        return false;
+    }
+    else{
+        return EsABVacio(ABIzquierda(Arbol)) && EsABVacio(ABIzquierda(Arbol));
+    }
 }
 
 int NumeroHojas(Arbol Arbol){
